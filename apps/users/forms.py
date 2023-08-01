@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
 
 
@@ -38,3 +39,23 @@ class RegisterForm(forms.ModelForm):
         user.set_password(self.cleaned_data['password'])
         user.save()
         return user
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=150)
+    password = forms.CharField(max_length=150, widget=forms.PasswordInput)
+
+    def clean(self):
+        username = self.cleaned_data['username']
+        password = self.cleaned_data['password']
+
+        if not User.objects.filter(username=username).exists():
+            raise forms.ValidationError('username hato')
+
+        if not User.objects.filter(password=password).exists():
+            raise forms.ValidationError('password hato')
+
+        return self.cleaned_data
+
+
+
