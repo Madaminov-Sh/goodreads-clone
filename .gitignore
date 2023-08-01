@@ -1,6 +1,5 @@
 .idea
 .env
 env
-requirements.txt
 .gitignore
 *initial.py
