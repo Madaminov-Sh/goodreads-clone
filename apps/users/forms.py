@@ -45,17 +45,16 @@ class LoginForm(forms.Form):
     username = forms.CharField(max_length=150)
     password = forms.CharField(max_length=150, widget=forms.PasswordInput)
 
-    def clean(self):
-        username = self.cleaned_data['username']
-        password = self.cleaned_data['password']
-
-        if not User.objects.filter(username=username).exists():
-            raise forms.ValidationError('username hato')
-
-        if not User.objects.filter(password=password).exists():
-            raise forms.ValidationError('password hato')
-
-        return self.cleaned_data
-
+    # def clean(self):
+    #     username = self.cleaned_data['username']
+    #     password = self.cleaned_data['password']
+    #
+    #     if username and not User.objects.filter(username=username).exists():
+    #         raise forms.ValidationError('username hato')
+    #
+    #     if password is None:
+    #         raise forms.ValidationError('password kiritilishi shart')
+    #     return self.cleaned_data
+    #
 
 

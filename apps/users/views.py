@@ -1,4 +1,4 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.views import View
@@ -30,15 +30,20 @@ class RegisterView(View):
 class LoginView(View):
     def post(self, request):
         form = LoginForm(data=request.POST)
-        user = request.user
         if form.is_valid():
-            login(request, user)
-            messages.success(request, 'muvaffaqiyatli login qilindi')
-            return redirect('books:home')
-        return render(request, 'register/login.html', {"form": form})
-
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                print("logined")
+                return redirect('books:home')
+            else:
+                messages.error(request, 'Bunday user mavjud emas')
+                redirect('users:register')
+        return render(request, 'register/login.html',{'form': form})
 
     def get(self, request):
         form = LoginForm()
-        return render(request, 'register/login.html', {"form": form})
-
+        print('get method')
+        return render(request, 'register/login.html',{'form': form})
