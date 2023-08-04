@@ -58,7 +58,6 @@ class RegisterTestCase(TestCase):
         self.assertFormError(response, 'form', 'email', "Enter a valid email address.")
 
     def test_unique_fields(self):
-        #   xuddi shu ko'rinishda username'ni ham tekshirishimiz mumkin
         User.objects.create(email='Shohjahon@gmail.com', username='Shohjahon')
 
         resp = self.client.post(

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ book.title }} detail</title>
+</head>
+<body>
+    <h2>title: {{ book.title }}</h2>
+    <p><strong>description</strong>: {{ book.description }}</p>
+    <br>
+
+   <strong> isbn:</strong> {{ book.isbn }}
+    <br><br><a href="{% url 'books:books' %}"><button>back to</button></a>
+</body>
+</html>

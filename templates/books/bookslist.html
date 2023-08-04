@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Books List</title>
+</head>
+<body>
+    {% if object_list %}
+        {% for book in object_list %}
+            <a href="{% url 'books:detail' book.id %}">{{ book.title }}</a><br><br>
+        {% endfor %}
+    {% else %}
+        <h3> No books found </h3>
+    {% endif %}
+</body>
+</html>
