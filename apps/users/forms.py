@@ -45,16 +45,22 @@ class LoginForm(forms.Form):
     username = forms.CharField(max_length=150)
     password = forms.CharField(max_length=150, widget=forms.PasswordInput)
 
-    # def clean(self):
-    #     username = self.cleaned_data['username']
-    #     password = self.cleaned_data['password']
-    #
-    #     if username and not User.objects.filter(username=username).exists():
-    #         raise forms.ValidationError('username hato')
-    #
-    #     if password is None:
-    #         raise forms.ValidationError('password kiritilishi shart')
-    #     return self.cleaned_data
-    #
 
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username', 'email']
 
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if len(username) < 5:
+            raise ValidationError("username 5 ta belgidan kam bo'lmasligi kerak")
+        elif username[0].isdigit():
+            raise ValidationError("username'ning birinchi belgisi raqam bo'lmasligi kerak")
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise ValidationError('email already exists')
+        return email

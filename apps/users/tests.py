@@ -89,11 +89,12 @@ class RegisterTestCase(TestCase):
         self.assertEqual(user_count, 1)
         self.assertFormError(resp, 'form', 'username', 'A user with that username already exists.')
 class LoginTestCase(TestCase):
-    def test_is_login(self):
-        db_user = User.objects.create( username='shohjahon1', email='shohjahon1@gmail.com')
-        db_user.set_password('nimadir')
-        db_user.save()
+    def setUp(self):
+        self.db_user = User.objects.create(first_name='first_name', last_name='last',  username='shohjahon1', email='shohjahon1@gmail.com')
+        self.db_user.set_password('nimadir')
+        self.db_user.save()
 
+    def test_is_login(self):
         self.client.post(
             reverse("users:login"),
             data={
@@ -104,3 +105,32 @@ class LoginTestCase(TestCase):
         user = get_user(self.client)
 
         self.assertTrue(user.is_authenticated)
+
+
+class ProfileTestCase(TestCase):
+    def setUp(self):
+        self.db_user = User.objects.create(first_name='first_name', last_name='last', username='shohjahon1', email='shohjahon1@gmail.com')
+        self.db_user.set_password('nimadir')
+        self.db_user.save()
+
+    def test_login_reuqired(self):
+        response = self.client.get(reverse('users:profile'))
+        self.assertEqual(response.url, reverse('users:login') + '?next=/users/profile/')
+
+    def test_profile_details(self):
+        self.client.login(username='shohjahon1', password='nimadir')
+
+        response = self.client.get(reverse('users:profile'))
+
+        self.assertContains(response, self.db_user.first_name)
+        self.assertContains(response, self.db_user.last_name)
+        self.assertContains(response, self.db_user.username)
+        self.assertContains(response, self.db_user.email)
+
+    def test_logout(self):
+        self.client.login(username='shohjahon1', password='nimadir')
+
+        self.client.get(reverse('users:logout'))
+        user = get_user(self.client)
+
+        self.assertFalse(user.is_authenticated)

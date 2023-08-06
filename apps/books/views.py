@@ -1,8 +1,9 @@
-from .models import Book
 from django.shortcuts import render
 from django.views.generic import ListView
 from django.views import View
 from django.http import HttpResponse
+
+from .models import Book
 
 
 def homePage(request):
