@@ -1,11 +1,11 @@
 from django.urls import path
 
-from apps.books.views import homePage, BooksListView, BookDetailView
+from apps.books.views import BookListsApiView, BookDetailAPIView
 
 app_name = 'books'
 
 urlpatterns = [
-    path('', homePage, name='home'),
-    path('books/', BooksListView.as_view(), name='books'),
-    path('detail/<int:id>/', BookDetailView.as_view(), name='detail'),
+    path('', BookListsApiView.as_view(), name='home'),
+    path('<int:id>/', BookDetailAPIView.as_view(), name='books'),
+    # path('detail/<int:id>/', BookDetailView.as_view(), name='detail'),
 ]

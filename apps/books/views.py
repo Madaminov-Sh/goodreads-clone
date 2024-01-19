@@ -1,24 +1,37 @@
-from django.shortcuts import render
-from django.views.generic import ListView
-from django.views import View
-from django.http import HttpResponse
+from rest_framework.views import APIView, status
+from rest_framework.response import Response
+
 
 from .models import Book
+from .serializers import BookSerializer
 
 
-def homePage(request):
-    return render(request, 'index.html', {})
+class BookListsApiView(APIView):
+    def get(self, request):
+        try:
+            books = Book.objects.all()
+            serializer = BookSerializer(books, many=True)
+            return Response({
+                "success": True,
+                "data": serializer.data,
+                "status": status.HTTP_200_OK
+            })
+        except Book.DoesNotExist:
+            return Response({'error': "Book does not exist", "status": status.HTTP_400_BAD_REQUEST})
 
 
-class BooksListView(ListView):
-    queryset = Book.objects.all()
-    template_name = 'books/bookslist.html'
 
-
-class BookDetailView(View):
+class BookDetailAPIView(APIView):
     def get(self, requset, id):
         try:
             book = Book.objects.get(id=id)
+            serializer = BookSerializer(book)
+            return Response(
+                {
+                    "access": True,
+                    "status": status.HTTP_200_OK,
+                    "data": serializer.data
+                }
+            )
         except Book.DoesNotExist:
-            return HttpResponse('bunday kitob mavjud emas', status=404)
-        return render(requset, 'books/detail.html', {"book": book})
+            return Response({"error message": "Not found", "status": status.HTTP_400_BAD_REQUEST})

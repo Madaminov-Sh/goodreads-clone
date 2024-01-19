@@ -5,9 +5,10 @@
     <title>Books List</title>
 </head>
 <body>
+    <h1>Books lists</h1>
     {% if object_list %}
         {% for book in object_list %}
-            <a href="{% url 'books:detail' book.id %}">{{ book.title }}</a><br><br>
+        <h2>book title:     <a href="{% url 'books:detail' book.id %}">{{ book.title }}</a></h2>
         {% endfor %}
     {% else %}
         <h3> No books found </h3>

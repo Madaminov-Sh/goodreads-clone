@@ -21,17 +21,17 @@ class RegisterForm(forms.ModelForm):
     def clean_password(self):
         password = self.cleaned_data['password']
         if len(password) <= 8:
-            raise ValidationError("password 8 ta belgidan kam bo'lmasligi kerak")
+            raise ValidationError("password must not be less than 8 characters")
         elif password.isdigit():
-            raise ValidationError("password faqat raqamlar ketmaketligidan iborat bo'lmasligi kerak")
+            raise ValidationError("the password should not consist of only a sequence of numbers")
         return password
 
     def clean_username(self):
         username = self.cleaned_data['username']
         if len(username) < 5:
-            raise ValidationError("username 5 ta belgidan kam bo'lmasligi kerak")
+            raise ValidationError("username must not be less than 5 characters")
         elif username[0].isdigit():
-            raise ValidationError("username'ning birinchi belgisi raqam bo'lmasligi kerak")
+            raise ValidationError("The first character of username must not be a number")
         return username
 
     def save(self, commit=True):
@@ -54,9 +54,9 @@ class UserProfileForm(forms.ModelForm):
     def clean_username(self):
         username = self.cleaned_data['username']
         if len(username) < 5:
-            raise ValidationError("username 5 ta belgidan kam bo'lmasligi kerak")
+            raise ValidationError("username must not be less than 5 characters")
         elif username[0].isdigit():
-            raise ValidationError("username'ning birinchi belgisi raqam bo'lmasligi kerak")
+            raise ValidationError("+The first character of username must not be a number")
         return username
 
     def clean_email(self):
